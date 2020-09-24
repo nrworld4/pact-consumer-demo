@@ -1,0 +1,67 @@
+{
+  "provider": {
+    "name": "DataProvider"
+  },
+  "consumer": {
+    "name": "DataConsumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for json data",
+      "request": {
+        "method": "GET",
+        "path": "/get/ice/2.0"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset\u003dUTF-8"
+        },
+        "body": {
+          "price": 10,
+          "name": "some name"
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset\u003d[\\w\\-]+)?"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        },
+        "generators": {
+          "body": {
+            "$.name": {
+              "type": "ProviderState",
+              "expression": "\\${name}",
+              "dataType": "STRING"
+            },
+            "$.price": {
+              "type": "ProviderState",
+              "expression": "\\${price}",
+              "dataType": "FLOAT"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "some state"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.15"
+    }
+  }
+}
